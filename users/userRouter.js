@@ -1,19 +1,34 @@
 const express = require('express');
-
 const router = express.Router();
+const userHelper = require('./userDb');
 
-// BASE USERS ENDPOINT
+///// BASE USERS ENDPOINT /////
 router.route("/")
 // add user
-.post(function rootPostController(req, res){
-  
+.post(validateUser, function rootPostController(req, res){
+  let newUser = req.body;
+  userHelper.insert(newUser)
+    .then(id => {
+      res.status(201).json(id);
+    })
 })
 // get all users
 .get(function rootGetController(req, res){
-  res.status(200).send('Root usersRouter');
+  userHelper.get()
+    .then(users => {
+      if (users) {
+        res.status(200).send(users);
+      } else {
+        res.status(404).json({ error: "User doesn't exist." })
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
 })
 
-// USERS BY ID ENDPOINT
+
+///// USERS BY ID ENDPOINT /////
 router.route("/:id")
 // get specific user
 .get(function idGetController(req, res){
@@ -28,7 +43,8 @@ router.route("/:id")
 
 })
 
-// POSTS OF USER BY ID
+
+///// POSTS OF USER BY ID /////
 router.route("/:id/posts")
 // get user's posts
 .get(function postWithIdGetController(req, res) {
@@ -45,8 +61,15 @@ function validateUserId(req, res, next) {
 
 };
 
+// check new user request object
 function validateUser(req, res, next) {
-
+  if (!req.body) {
+    res.status(400).send({ message: "Missing user data" })
+  } else if (req.body && !req.body.name) {
+    res.status(400).send({ message: "Missing required name field" })
+  } else {
+    next();
+  }
 };
 
 function validatePost(req, res, next) {
