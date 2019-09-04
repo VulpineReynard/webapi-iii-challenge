@@ -8,8 +8,8 @@ server.use(express.json());
 
 // <----- CUSTOM MIDDLEWARE ----->
 server.use(logger);
-server.use('/users', userRouter);
-server.use('/posts', postRouter);
+server.use('/api/users', userRouter);
+server.use('/api/posts', postRouter);
 
 
 server.get('/', (req, res) => {

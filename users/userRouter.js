@@ -31,8 +31,8 @@ router.route("/")
 ///// USERS BY ID ENDPOINT /////
 router.route("/:id")
 // get specific user
-.get(function idGetController(req, res){
-
+.get(validateUserId, function idGetController(req, res){
+  res.status(200).send(req.user)
 })
 // delete specific user
 .delete(function idDeleteController(req, res){
@@ -57,8 +57,13 @@ router.route("/:id/posts")
 
 // <----- CUSTOM MIDDLEWARE ----->
 
+// validates the user id given is valid
 function validateUserId(req, res, next) {
-
+  let id = req.params.id;
+  userHelper.getById(id)
+    .then(user => {
+    res.status(200).send(user);
+      })
 };
 
 // check new user request object
@@ -73,7 +78,7 @@ function validateUser(req, res, next) {
 };
 
 function validatePost(req, res, next) {
-
+  
 };
 
 module.exports = router;
