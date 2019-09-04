@@ -1,36 +1,45 @@
-const express = 'express';
+const express = require('express');
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
+// BASE USERS ENDPOINT
+router.route("/")
+// add user
+.post(function rootPostController(req, res){
+  
+})
+// get all users
+.get(function rootGetController(req, res){
+  res.status(200).send('Root usersRouter');
+})
 
-});
+// USERS BY ID ENDPOINT
+router.route("/:id")
+// get specific user
+.get(function idGetController(req, res){
 
-router.post('/:id/posts', (req, res) => {
+})
+// delete specific user
+.delete(function idDeleteController(req, res){
 
-});
+})
+// update specific user
+.put(function idPutController(req, res) {
 
-router.get('/', (req, res) => {
+})
 
-});
+// POSTS OF USER BY ID
+router.route("/:id/posts")
+// get user's posts
+.get(function postWithIdGetController(req, res) {
 
-router.get('/:id', (req, res) => {
+})
+// create post
+.post(function postWithIdPostController(req, res) {
 
-});
+})
 
-router.get('/:id/posts', (req, res) => {
-
-});
-
-router.delete('/:id', (req, res) => {
-
-});
-
-router.put('/:id', (req, res) => {
-
-});
-
-//custom middleware
+// <----- CUSTOM MIDDLEWARE ----->
 
 function validateUserId(req, res, next) {
 
