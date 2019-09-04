@@ -1,21 +1,22 @@
-const express = 'express';
+const express = require('express');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
 
+router.route("/")
+.get(function rootGetController(req, res){
+  res.status(200).
 });
 
-router.get('/:id', (req, res) => {
+router.route("/:id")
+.get(function idGetController(req, res){
 
-});
+})
+.delete(function idDeleteController(req, res){
 
-router.delete('/:id', (req, res) => {
-
-});
-
-router.put('/:id', (req, res) => {
-
+})
+.put(function idPutController(req, res){
+    
 });
 
 // custom middleware
