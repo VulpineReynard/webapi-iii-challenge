@@ -32,14 +32,20 @@ router.route("/")
 router.route("/:id")
 // get specific user
 .get(validateUserId, function idGetController(req, res){
-  res.status(200).send(req.user)
+  userHelper.getById(req.params.id)
+    .then(user => {
+      res.status(200).send(user);
+    })
 })
 // delete specific user
-.delete(function idDeleteController(req, res){
-
+.delete(validateUserId, function idDeleteController(req, res){
+  userHelper.remove(req.params.id)
+    .then(status => {
+      res.sendStatus(200).send(status);
+    })
 })
 // update specific user
-.put(function idPutController(req, res) {
+.put(validateUserId, function idPutController(req, res) {
 
 })
 
@@ -62,8 +68,9 @@ function validateUserId(req, res, next) {
   let id = req.params.id;
   userHelper.getById(id)
     .then(user => {
-    res.status(200).send(user);
-      })
+      req.user = user;
+      next();
+    })
 };
 
 // check new user request object

@@ -7,7 +7,10 @@ const userRouter = require('./users/userRouter');
 server.use(express.json());
 
 // <----- CUSTOM MIDDLEWARE ----->
+// globally
 server.use(logger);
+
+// locally on specific route
 server.use('/api/users', userRouter);
 server.use('/api/posts', postRouter);
 
