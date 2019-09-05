@@ -40,13 +40,16 @@ router.route("/:id")
 // delete specific user
 .delete(validateUserId, function idDeleteController(req, res){
   userHelper.remove(req.params.id)
-    .then(status => {
-      res.sendStatus(200).send(status);
+    .then(data => {
+      res.status(200).send('Resourse deleted successfully.');
     })
 })
 // update specific user
 .put(validateUserId, function idPutController(req, res) {
-
+  userHelper.update(req.params.id, req.body)
+    .then(count => {
+      res.status(200).send('Updated Sucessfully.');
+    })
 })
 
 
@@ -68,8 +71,10 @@ function validateUserId(req, res, next) {
   let id = req.params.id;
   userHelper.getById(id)
     .then(user => {
-      req.user = user;
       next();
+    })
+    .catch(err => {
+      res.status(400).send('Invalid ID');
     })
 };
 
