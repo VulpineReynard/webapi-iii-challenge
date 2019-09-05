@@ -1,11 +1,14 @@
 const express = require('express');
-
+const postHelper = require('./postDb');
 const router = express.Router();
 
 
 router.route("/")
 .get(function rootGetController(req, res) {
-  res.status(200).send('Root postsRouter');
+  postHelper.get() 
+    .then(posts => {
+      res.status(200).send(posts);
+    })
 });
 
 router.route("/:id")

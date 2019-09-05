@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userHelper = require('./userDb');
+const postHelper = require('../posts/postDb');
 
 ///// BASE USERS ENDPOINT /////
 router.route("/")
@@ -56,12 +57,22 @@ router.route("/:id")
 ///// POSTS OF USER BY ID /////
 router.route("/:id/posts")
 // get user's posts
-.get(function postWithIdGetController(req, res) {
-
+.get(validateUserId, function postWithIdGetController(req, res) {
+  postHelper.get()
+    .then(posts => {
+      let targetPosts = posts.filter(post => post.user_id === 1)
+      res.status(200).send(targetPosts);
+    })
 })
-// create post
-.post(function postWithIdPostController(req, res) {
-
+// create a post
+.post(validateUserId, validatePost, function postWithIdPostController(req, res) {
+  let newPost = req.body;
+  newPost.user_id = req.user;
+  console.log(newPost);
+  postHelper.insert(newPost)
+    .then(returned => {
+      res.status(201).send(returned);
+    })
 })
 
 // <----- CUSTOM MIDDLEWARE ----->
@@ -71,6 +82,7 @@ function validateUserId(req, res, next) {
   let id = req.params.id;
   userHelper.getById(id)
     .then(user => {
+      req.user = id;
       next();
     })
     .catch(err => {
@@ -90,7 +102,7 @@ function validateUser(req, res, next) {
 };
 
 function validatePost(req, res, next) {
-  
+  next();
 };
 
 module.exports = router;
