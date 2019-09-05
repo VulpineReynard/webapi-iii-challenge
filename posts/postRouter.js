@@ -1,21 +1,25 @@
-const express = 'express';
-
+const express = require('express');
+const postHelper = require('./postDb');
 const router = express.Router();
 
-router.get('/', (req, res) => {
 
+router.route("/")
+.get(function rootGetController(req, res) {
+  postHelper.get() 
+    .then(posts => {
+      res.status(200).send(posts);
+    })
 });
 
-router.get('/:id', (req, res) => {
+router.route("/:id")
+.get(function idGetController(req, res) {
 
-});
+})
+.delete(function idDeleteController(req, res) {
 
-router.delete('/:id', (req, res) => {
-
-});
-
-router.put('/:id', (req, res) => {
-
+})
+.put(function idPutController(req, res) {
+    
 });
 
 // custom middleware
